@@ -1,1 +1,8 @@
+# MacOs
 .DS_Store
+
+# GCP SA credential files
+*.json
+
+# Environment variables
+.env
