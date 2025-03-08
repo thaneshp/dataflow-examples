@@ -6,3 +6,13 @@
 
 # Environment variables
 .env
+
+# Terraform state file
+terraform.tfstate
+terraform.tfstate.backup
+
+# Terraform lock file
+.terraform.lock.hcl
+
+# Terraform directory
+.terraform

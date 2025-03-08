@@ -12,6 +12,16 @@ Before you begin, ensure you have the following:
 
 ## Setup
 
+Before running the examples, you'll need to set up the required Google Cloud Platform resources. This repository includes Terraform configurations to automatically provision:
+
+- A service account with necessary permissions for Dataflow
+- Cloud Storage buckets for input/output data
+- BigQuery dataset and tables
+- Required IAM roles and permissions
+
+Follow the steps below to set up the infrastructure:
+
+
 1. **Clone the repository**:
 
    ```bash
@@ -29,7 +39,7 @@ Before you begin, ensure you have the following:
 2. **Authenticate with Google Cloud**:
 
     ```
-    gcloud auth login
+    gcloud auth application-default login
     ```
 
 3. **Initialize Terraform**:
@@ -41,13 +51,13 @@ Before you begin, ensure you have the following:
 4. **Plan the infrastructure**:
 
      ```bash
-     terraform plan -var-file="env.tfvars"
+     terraform plan -var-file="../common.tfvars"
      ```
 
 5. **Apply the configuration**:
 
      ```bash
-     terraform apply -var-file="env.tfvars" -auto-approve
+     terraform apply -var-file="../common.tfvars" -auto-approve
      ```
 
 ## Usage
@@ -70,38 +80,24 @@ Before you begin, ensure you have the following:
    REGION=your-gcp-region
    ```
 
-2. **Run the sample scripts**:
+3. **Run the sample scripts**:
 
-   Navigate to the `classic-templates` directory and run any of the following scripts:
+   Navigate to the `classic-templates` directory and run any of the scripts.
+
+   The scripts perform the following:
+   
+   * `00-directRunner-to-stdout.py`: Processes flight delays locally, prints to stdout
+   * `01-directRunner-to-gcs.py`: Processes flight delays locally, writes to GCS
+   * `02-dataflow-to-gcs.py`: Processes flight delays on Dataflow, writes to GCS
+   * `03-dataflow-to-bq.py`: Processes flight delays on Dataflow, writes to BigQuery
+
+4. **Apply the Dataflow configuration**:
 
    ```bash
-   # Test locally with DirectRunner printing to stdout
-   python directRunner-to-stdout.py
-
-   # Test locally with DirectRunner writing to GCS
-   python directRunner-to-gcs.py 
-
-   # Create Dataflow template and run job
-   python dataflow-to-gcs.py
-   ```
-
-3. **Update the Dataflow job configuration**:
-
-   After creating the template, update `dataflow.tf` with:
-
-   ```hcl
-   resource "google_dataflow_job" "batch_job" {
-     name              = var.job_name
-     template_gcs_path = "gs://${var.project_id}/template/batch_job_df_gcs_flights"
-     temp_gcs_location = "gs://${var.project_id}/temp"
-     project           = var.project_id
-     region           = var.region
-   }
-   ```
-
-   Then run:
-   ```bash
-   terraform apply -var-file="env.tfvars" -auto-approve
+   cd dataflow-examples/terraform/dataflow-job
+   terraform init
+   terraform plan --var-file="../common.tfvars"
+   terraform apply --var-file="../common.tfvars" -auto-approve
    ```
 
 ## Notes
@@ -113,3 +109,6 @@ Before you begin, ensure you have the following:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Contact
+
+Thanesh Pannirselvam - [@thaneshp333](https://x.com/thaneshp333)
