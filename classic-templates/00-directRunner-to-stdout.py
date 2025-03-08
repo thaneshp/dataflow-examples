@@ -1,3 +1,5 @@
+# Process flight delay data from CSV and print results to stdout using DirectRunner
+
 import apache_beam as beam
 
 p1 = beam.Pipeline()
@@ -14,7 +16,6 @@ p1
   | "Filter Delays time" >> beam.ParDo(Filter())
   | "Create a key-value time" >> beam.Map(lambda record: (record[4],int(record[8])))
   | "Sum by key time" >> beam.CombinePerKey(sum)
-#  | "Print Results" >> beam.Map(print)
 )
 
 Delayed_num = (
@@ -24,7 +25,6 @@ p1
   | "Filter Delays" >> beam.ParDo(Filter())
   | "Create a key-value" >> beam.Map(lambda record: (record[4],int(record[8])))
   | "Count by key" >> beam.combiners.Count.PerKey()
-#    | "Print Results" >> beam.Map(print)
 )
 
 Delay_table = (
