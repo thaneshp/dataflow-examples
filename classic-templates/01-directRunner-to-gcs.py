@@ -1,4 +1,14 @@
+# Process flight delay data from CSV and write to GCS using DirectRunner
+
+from dotenv import load_dotenv
 import apache_beam as beam
+import os
+
+load_dotenv()
+
+serviceAccount = os.getenv('SERVICE_ACCOUNT_CREDENTIALS')
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= serviceAccount
+project_id = os.getenv('PROJECT_ID')
 
 p1 = beam.Pipeline()
 
@@ -14,7 +24,6 @@ p1
   | "Filter Delays time" >> beam.ParDo(Filter())
   | "Create a key-value time" >> beam.Map(lambda record: (record[4],int(record[8])))
   | "Sum by key time" >> beam.CombinePerKey(sum)
-#  | "Print Results" >> beam.Map(print)
 )
 
 Delayed_num = (
@@ -24,13 +33,12 @@ Delayed_num = (
     | "Filter Delays" >> beam.ParDo(Filter())
     | "Create a key-value" >> beam.Map(lambda record: (record[4],int(record[8])))
     | "Count by key" >> beam.combiners.Count.PerKey()
-#    | "Print Results" >> beam.Map(print)
 )
 
 Delay_table = (
     {'Delayed_num':Delayed_num,'Delayed_time':Delayed_time} 
-    | beam.CoGroupByKey()
-    | beam.Map(print)
+    | "Group By" >> beam.CoGroupByKey()
+    | "Save to GCS" >> beam.io.WriteToText(f'gs://{project_id}/flights_output.csv')
 )
 
 p1.run()
