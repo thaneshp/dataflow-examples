@@ -10,8 +10,14 @@ resource "google_project_iam_member" "dataflow_worker" {
   member  = "serviceAccount:${google_service_account.dataflow_service_account.email}"
 }
 
-resource "google_project_iam_member" "storage_viewer" {
+resource "google_project_iam_member" "storage_admin" {
   project = var.project_id
-  role    = "roles/storage.objectViewer"
+  role    = "roles/storage.objectAdmin"
+  member  = "serviceAccount:${google_service_account.dataflow_service_account.email}"
+}
+
+resource "google_project_iam_member" "bigquery_data_editor" {
+  project = var.project_id
+  role    = "roles/bigquery.dataEditor"
   member  = "serviceAccount:${google_service_account.dataflow_service_account.email}"
 }

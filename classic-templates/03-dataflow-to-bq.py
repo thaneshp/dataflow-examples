@@ -7,10 +7,10 @@ from apache_beam.options.pipeline_options import PipelineOptions
 
 load_dotenv()
 
-project_id = os.getenv('PROJECT_ID')
-region = os.getenv('REGION')
 serviceAccount = os.getenv('SERVICE_ACCOUNT_CREDENTIALS')
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= serviceAccount
+project_id = os.getenv('PROJECT_ID')
+region = os.getenv('REGION')
 
 pipeline_options = {
   'project': project_id ,
@@ -19,7 +19,7 @@ pipeline_options = {
   'staging_location': f'gs://{project_id}/temp',
   'temp_location': f'gs://{project_id}/temp',
   'template_location': f'gs://{project_id}/template/batch_job_df_bq_flights',
-  'save_main_session': True 
+  'save_main_session': True
 }
 
 pipeline_options = PipelineOptions.from_dictionary(pipeline_options)
@@ -57,7 +57,7 @@ def dict_level0(record):
     return(dict_)
 
 table_schema = 'airport:STRING, list_Delayed_num:INTEGER, list_Delayed_time:INTEGER'
-table = f'{project_id}:flights_dataflow.flights_aggr'
+table = f'{project_id}:flights_dataset.flights_aggr'
 
 Delayed_time = (
   p1
@@ -88,7 +88,7 @@ Delay_table = (
                               schema=table_schema,
                               write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
                               create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-                              custom_gcs_temp_location = f'gs://{project_id}/temp' )
+                              custom_gcs_temp_location = f'gs://{project_id}/temp')
 )
 
 p1.run()

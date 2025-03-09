@@ -8,6 +8,7 @@ load_dotenv()
 
 serviceAccount = os.getenv('SERVICE_ACCOUNT_CREDENTIALS')
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= serviceAccount
+project_id = os.getenv('PROJECT_ID')
 
 p1 = beam.Pipeline()
 

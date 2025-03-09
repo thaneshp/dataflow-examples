@@ -21,7 +21,6 @@ Before running the examples, you'll need to set up the required Google Cloud Pla
 
 Follow the steps below to set up the infrastructure:
 
-
 1. **Clone the repository**:
 
    ```bash
@@ -39,7 +38,7 @@ Follow the steps below to set up the infrastructure:
 2. **Authenticate with Google Cloud**:
 
     ```
-    gcloud auth application-default login
+    gcloud auth login
     ```
 
 3. **Initialize Terraform**:
@@ -99,6 +98,13 @@ Follow the steps below to set up the infrastructure:
    terraform plan --var-file="../common.tfvars"
    terraform apply --var-file="../common.tfvars" -auto-approve
    ```
+
+5. **View the Dataflow jobs**:
+
+   Navigate to the [Dataflow Jobs page](https://console.cloud.google.com/dataflow/jobs) in the Google Cloud Console to monitor your running jobs. You should see two jobs:
+   
+   * `df-to-gcs-job`: Processing flight delays and writing to Cloud Storage
+   * `df-to-bq-job`: Processing flight delays and writing to BigQuery
 
 ## Notes
 

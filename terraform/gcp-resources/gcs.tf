@@ -19,8 +19,8 @@ resource "google_storage_bucket_object" "template_folder" {
 }
 
 resource "google_storage_bucket_object" "input_folder" {
-  name          = "input/"
-  content       = " "
+  name          = "input/flights_sample.csv"
+  source        = "../../classic-templates/flights_sample.csv"
   bucket        = google_storage_bucket.dataflow_bucket.name
 }
 
